@@ -2,20 +2,9 @@
 
 > A parser which transform manual tests in Mardown to JSON
 
-
-## Install
-
+## As a command line tool
 ```sh
-$ npm install --save markdown-testfile-to-json
-```
-
-
-## Usage
-
-```js
-var markdownTestfileToJson = require('markdown-testfile-to-json');
-
-markdownTestfileToJson('Rainbow');
+$ ./cli.js test-formated-file.md
 ```
 
 ```sh
@@ -23,10 +12,25 @@ $ npm install --global markdown-testfile-to-json
 $ markdown-testfile-to-json --help
 ```
 
+## As a library
+
+### Install
+
+```sh
+$ npm install --save markdown-testfile-to-json
+```
+
+### Usage
+
+```js
+var markdownTestfileToJson = require('markdown-testfile-to-json');
+
+markdownTestfileToJson(inputFile);
+```
 
 ## License
 
-MIT © [Johan Lorenzo]()
+MIT
 
 
 [npm-image]: https://badge.fury.io/js/markdown-testfile-to-json.svg
