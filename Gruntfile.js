@@ -15,7 +15,7 @@ module.exports = function (grunt) {
         src: ['Gruntfile.js']
       },
       js: {
-        src: ['*.js']
+        src: ['*.js', 'lib/**/*.js']
       },
       test: {
         src: ['test/**/*.js']
@@ -26,7 +26,7 @@ module.exports = function (grunt) {
         reporter: 'nyan',
         bail: true
       },
-      all: ['test/*.js']
+      all: ['test/**/*.js']
     },
     watch: {
       gruntfile: {
