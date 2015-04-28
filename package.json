@@ -1,17 +1,19 @@
 {
   "name": "markdown-testfile-to-json",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A parser which transform manual tests in Mardown to JSON",
   "homepage": "https://github.com/JohanLorenzo/markdown-testfile-to-json",
-  "repository": "JohanLorenzo/markdown-testfile-to-json",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/johanlorenzo/markdown-testfile-to-json.git"
+  },
   "license": "MIT",
   "files": [
     "index.js",
     "cli.js"
   ],
   "keywords": [
-    "markdown-testfile-to-json",
-    ""
+    "markdown-testfile-to-json"
   ],
   "dependencies": {
     "marked": "^0.3.3",
@@ -33,5 +35,13 @@
   },
   "bin": {
     "markdown-testfile-to-json": "cli.js"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/johanlorenzo/markdown-testfile-to-json/issues"
+  },
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "author": ""
 }
