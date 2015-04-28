@@ -1,0 +1,35 @@
+{
+  "name": "markdown-testfile-to-json",
+  "version": "0.0.0",
+  "description": "A parser which transform manual tests in Mardown to JSON",
+  "homepage": "https://github.com/JohanLorenzo/markdown-testfile-to-json",
+  "repository": "JohanLorenzo/markdown-testfile-to-json",
+  "license": "MIT",
+  "files": [
+    "index.js",
+    "cli.js"
+  ],
+  "keywords": [
+    "markdown-testfile-to-json",
+    ""
+  ],
+  "dependencies": {
+    "meow": "^3.1.0"
+  },
+  "devDependencies": {
+    "grunt-cli": "^0.1.13",
+    "grunt-contrib-jshint": "^0.11.0",
+    "grunt-contrib-nodeunit": "^0.4.1",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-mocha-cli": "^1.12.0",
+    "jshint-stylish": "^1.0.1",
+    "load-grunt-tasks": "^3.1.0",
+    "time-grunt": "^1.1.0"
+  },
+  "scripts": {
+    "test": "grunt"
+  },
+  "bin": {
+    "markdown-testfile-to-json": "cli.js"
+  }
+}
