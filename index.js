@@ -1,4 +1,11 @@
 'use strict';
-module.exports = function (str) {
-  console.log(str || 'Rainbow');
+var Promise = require('promise');
+var readFile = Promise.denodeify(require('fs').readFile);
+var parseMarkdown = require('./lib/parse-markdown');
+
+module.exports = function (inputFilePath) {
+  readFile(inputFilePath, 'utf8').then(function(text) {
+    var json = parseMarkdown(text);
+    console.log(JSON.stringify(json));
+  });
 };

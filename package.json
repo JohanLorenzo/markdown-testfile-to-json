@@ -15,7 +15,8 @@
   ],
   "dependencies": {
     "marked": "^0.3.3",
-    "meow": "^3.1.0"
+    "meow": "^3.1.0",
+    "promise": "^7.0.1"
   },
   "devDependencies": {
     "grunt-cli": "^0.1.13",

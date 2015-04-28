@@ -6,10 +6,10 @@ var markdownTestfileToJson = require('./');
 var cli = meow({
   help: [
     'Usage',
-    '  markdown-testfile-to-json <input>',
+    '  markdown-testfile-to-json <inputFile>',
     '',
     'Example',
-    '  markdown-testfile-to-json Unicorn'
+    '  markdown-testfile-to-json tests.md'
   ].join('\n')
 });
 
