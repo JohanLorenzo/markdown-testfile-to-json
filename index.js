@@ -1,7 +1,7 @@
 'use strict';
 var Promise = require('promise');
 var readFile = Promise.denodeify(require('fs').readFile);
-var parseMarkdown = require('./lib/parse-markdown');
+var parseMarkdown = require('./lib/parsers/markdown');
 
 module.exports = function (inputFilePath) {
   readFile(inputFilePath, 'utf8').then(function(text) {
