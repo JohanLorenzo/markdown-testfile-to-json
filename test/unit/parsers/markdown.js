@@ -1,6 +1,6 @@
 'use strict';
 
-var assert = require('assert');
+var assert = require('chai').assert;
 var parseMarkdown = require('../../../lib/parsers/markdown');
 
 describe('The magical ugly parser', function () {
@@ -10,14 +10,14 @@ describe('The magical ugly parser', function () {
     '',
     '## Launch suite',
     '',
-    '### fxos.func.sanity.launch-contacts',
+    '### fxos.func.sanity.launch_contacts',
     '`Bug 2 `',
     '`Story 1`',
     '`Draft`',
     '',
     'Launch contacts! this is an updated version',
     '',
-    '### fxos.func.sanity.launch-music',
+    '### fxos.func.sanity.launch_music',
     '`Bug 3 `',
     '`Story 3`',
     '`Disabled`',
@@ -25,7 +25,7 @@ describe('The magical ugly parser', function () {
     'Launch music',
     '',
     '',
-    '### fxos.func.sanity.launch-sms-repeated',
+    '### fxos.func.sanity.launch_sms_repeated',
     '`Bug 3 `',
     '`Story 3`',
     '`Xfail`',
@@ -44,14 +44,14 @@ describe('The magical ugly parser', function () {
     'id2 | b    | 2    | two two',
     '',
     '',
-    '### fxos.func.sanity.launch-rocketbar',
+    '### fxos.func.sanity.launch_rocketbar',
     '`Bug 4`',
     '`Story 3`',
     '`Draft`',
     '',
     'Launch rocketbar'].join('\n'));
 
-    assert.deepEqual(actualResult, [{"id":"fxos.func.sanity.launch-contacts","bug":2,"userStory":1,"state":"draft","instructions":"Launch contacts! this is an updated version"},{"id":"fxos.func.sanity.launch-music","bug":3,"userStory":3,"state":"disabled","instructions":"Launch music"},{"id":"fxos.func.sanity.launch-sms-repeated","bug":3,"userStory":3,"state":"xfail","instructions":"Launch SMS and measure elapsed time\nDo it again.\nAnd again."},{"id":"fxos.func.parameterized.test","instructions":"Launch the dialog, insert :val1, :val2, :val3 and hit enter.","state": "active", "variables":[{"ID":"id1","val1":"a","val2":"1","val3":"one one"},{"ID":"id2","val1":"b","val2":"2","val3":"two two"}]},{"id":"fxos.func.sanity.launch-rocketbar","bug":4,"userStory":3,"state":"draft","instructions":"Launch rocketbar"}]);
+    assert.deepEqual(actualResult, [{"id":"fxos.func.sanity.launch_contacts","bug":2,"userStory":1,"state":"draft","instructions":"Launch contacts! this is an updated version"},{"id":"fxos.func.sanity.launch_music","bug":3,"userStory":3,"state":"disabled","instructions":"Launch music"},{"id":"fxos.func.sanity.launch_sms_repeated","bug":3,"userStory":3,"state":"xfail","instructions":"Launch SMS and measure elapsed time\nDo it again.\nAnd again."},{"id":"fxos.func.parameterized.test","instructions":"Launch the dialog, insert :val1, :val2, :val3 and hit enter.","state": "active", "variables":[{"ID":"id1","val1":"a","val2":"1","val3":"one one"},{"ID":"id2","val1":"b","val2":"2","val3":"two two"}]},{"id":"fxos.func.sanity.launch_rocketbar","bug":4,"userStory":3,"state":"draft","instructions":"Launch rocketbar"}]);
   });
 
 });
