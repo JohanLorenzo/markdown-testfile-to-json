@@ -3,24 +3,24 @@
 ## Launch suite
 
 ### fxos.func.sanity.launch_contacts
-`Bug 2 `
-`Story 1`
-`Draft`
+`bug 2 `
+`story 1`
+`draft`
 
 Launch contacts! this is an updated version
 
 ### fxos.func.sanity.launch_music
-`Bug 3 `
-`Story 3`
-`Disabled`
+`bug 3 `
+`story 3`
+`disabled`
 
 Launch music
 
 
 ### fxos.func.sanity.launch_sms_repeated
-`Bug 3 `
-`Story 3`
-`Xfail`
+`bug 3 `
+`story 3`
+`xfail`
 
 Launch SMS and measure elapsed time
 Do it again.
@@ -37,8 +37,8 @@ id2 | b    | 2    | two two
 
 
 ### fxos.func.sanity.launch_rocketbar
-`Bug 4`
-`Story 3`
-`Draft`
+`bug 4`
+`story 3`
+`draft`
 
 Launch rocketbar
