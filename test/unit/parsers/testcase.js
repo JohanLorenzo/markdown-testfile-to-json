@@ -43,7 +43,7 @@ describe('TestcaseParser', function () {
     it('should return a Testcase', function() {
       token = {
         name: '',
-        followingTokens: []
+        childrenTokens: []
       };
       var testcase = TestcaseParser.parse(token);
       assert.isDefined(testcase);
@@ -53,7 +53,7 @@ describe('TestcaseParser', function () {
     it('should initialize the id', function() {
       token = {
         name: 'id',
-        followingTokens: []
+        childrenTokens: []
       };
       TestcaseParser.parse(token);
       assert.ok(testcaseSpy.calledWith('id'));
@@ -61,7 +61,7 @@ describe('TestcaseParser', function () {
 
     it('should call _handleParagraph() if a paragraph is a following token', function() {
       token = {
-        followingTokens: [{
+        childrenTokens: [{
           type: 'paragraph',
           text: 'text'
         }]
@@ -73,7 +73,7 @@ describe('TestcaseParser', function () {
 
     it('should call _handleTable() if a table is a following token', function() {
       token = {
-        followingTokens: [{
+        childrenTokens: [{
           type: 'table',
           header: ['text'],
           cells: [['']]
@@ -86,7 +86,7 @@ describe('TestcaseParser', function () {
 
     it('should handle multiple following tokens', function() {
       token = {
-        followingTokens: [{
+        childrenTokens: [{
           type: 'paragraph',
           text: 'text'
         },{
@@ -101,7 +101,7 @@ describe('TestcaseParser', function () {
 
     it('should throw an error if a following token is not supported at this level', function() {
       token = {
-        followingTokens: [{
+        childrenTokens: [{
           type: 'header'
         }]
       };
