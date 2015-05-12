@@ -3,11 +3,13 @@
 var assert = require('chai').assert;
 var sinon = require('sinon');
 var rewire = require("rewire");
-
-var TESTCASE_PARSER_PATH = '../../../lib/parsers/testcase';
-var TestcaseParser = require(TESTCASE_PARSER_PATH);
+var TestcaseParser = rewire('../../../lib/parsers/testcase');
 
 describe('TestcaseParser', function () {
+
+  function TestcaseMock() {}
+  TestcaseMock.isValidState = function() {}
+  TestcaseParser.__set__("Testcase", TestcaseMock);
 
   var testcaseNotSanitized;
 
@@ -20,9 +22,6 @@ describe('TestcaseParser', function () {
     var token;
 
     before(function() {
-      TestcaseParser = rewire(TESTCASE_PARSER_PATH);
-
-      function TestcaseMock() {}
       testcaseSpy = sinon.spy(TestcaseMock);
       TestcaseParser.__set__("Testcase", testcaseSpy);
 
@@ -37,7 +36,7 @@ describe('TestcaseParser', function () {
     });
 
     after(function() {
-      TestcaseParser = require(TESTCASE_PARSER_PATH);
+      TestcaseParser.__set__("Testcase", TestcaseMock);
     });
 
     it('should return a Testcase', function() {
@@ -183,6 +182,9 @@ describe('TestcaseParser', function () {
   });
 
   describe('_handleDecorator()', function() {
+
+    var isValidStateMock = sinon.stub(TestcaseMock, 'isValidState');
+
     it('should attach the bug number', function() {
       TestcaseParser._handleDecorators(testcaseNotSanitized, ['bug 1']);
       assert.strictEqual(testcaseNotSanitized.bug, '1');
@@ -194,6 +196,7 @@ describe('TestcaseParser', function () {
     });
 
     it('should attach the state of the bug', function() {
+      isValidStateMock.withArgs('xfail').returns(true);
       TestcaseParser._handleDecorators(testcaseNotSanitized, ['xfail']);
       assert.strictEqual(testcaseNotSanitized.state, 'xfail');
     });
@@ -216,6 +219,8 @@ describe('TestcaseParser', function () {
     });
 
     it('should throw an error if the decorator is not supported', function() {
+      isValidStateMock.withArgs('invalidDecorator').returns(false);
+
       assert.throws(function() {
         TestcaseParser._handleDecorators(testcaseNotSanitized, ['invalidDecorator']);
       }, Error, '"invalidDecorator" is not a supported decorator.');
