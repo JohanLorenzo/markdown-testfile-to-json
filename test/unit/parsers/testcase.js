@@ -8,7 +8,7 @@ var TestcaseParser = rewire('../../../lib/parsers/testcase');
 describe('TestcaseParser', function () {
 
   function TestcaseMock() {}
-  TestcaseMock.isValidState = function() {}
+  TestcaseMock.isValidState = function() {};
   TestcaseParser.__set__("Testcase", TestcaseMock);
 
   var testcaseNotSanitized;
