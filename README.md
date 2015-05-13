@@ -1,4 +1,4 @@
-#  [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
+#  [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Coverage Status][coveralls-image]][coveralls-url]
 
 > A parser which transform manual tests in Mardown to JSON
 
@@ -39,3 +39,5 @@ MIT
 [travis-url]: https://travis-ci.org/JohanLorenzo/markdown-testfile-to-json
 [daviddm-image]: https://david-dm.org/JohanLorenzo/markdown-testfile-to-json.svg?theme=shields.io
 [daviddm-url]: https://david-dm.org/JohanLorenzo/markdown-testfile-to-json
+[coveralls-image]: https://coveralls.io/repos/JohanLorenzo/markdown-testfile-to-json/badge.svg?branch=master
+[coveralls-url]: https://coveralls.io/r/JohanLorenzo/markdown-testfile-to-json?branch=master
