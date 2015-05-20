@@ -2,7 +2,7 @@
 
 var assert = require('chai').assert;
 var sinon = require('sinon');
-var rewire = require("rewire");
+var rewire = require('rewire');
 var TestcaseParser = rewire('../../../lib/parsers/testcase');
 
 describe('TestcaseParser', function () {
@@ -11,10 +11,22 @@ describe('TestcaseParser', function () {
   TestcaseMock.isValidState = function() {};
   TestcaseParser.__set__("Testcase", TestcaseMock);
 
+  var errorHandlerMock = {
+    add: function() {}
+  };
+
+  TestcaseParser.__set__('errorHandler', errorHandlerMock);
+  var addMock = sinon.stub(errorHandlerMock, 'add');
+
+
   var testcaseNotSanitized;
 
   beforeEach(function() {
     testcaseNotSanitized = {};
+  });
+
+  afterEach(function() {
+    addMock.reset();
   });
 
   describe('parse()', function() {
@@ -98,14 +110,15 @@ describe('TestcaseParser', function () {
       assert.ok(TestcaseParser._handleParagraph.calledTwice);
     });
 
-    it('should throw an error if a following token is not supported at this level', function() {
+    it('should add an error if a following token is not supported at this level', function() {
       token = {
         childrenTokens: [{
           type: 'header'
         }]
       };
 
-      assert.throws(function() { TestcaseParser.parse(token); }, Error, '"header" is not supported in test cases');
+      TestcaseParser.parse(token);
+      sinon.assert.calledWith(addMock, new Error('"header" is not supported in test cases'));
     });
   });
 
@@ -213,45 +226,39 @@ describe('TestcaseParser', function () {
     });
 
     it('should exclude the blank lines', function() {
-      assert.doesNotThrow(function() {
-        TestcaseParser._handleDecorators(testcaseNotSanitized, ['\n']);
-      }, Error);
+      TestcaseParser._handleDecorators(testcaseNotSanitized, ['\n']);
+      sinon.assert.callCount(addMock, 0);
     });
 
-    it('should throw an error if the decorator is not supported', function() {
+    it('should add an error if the decorator is not supported', function() {
       isValidStateMock.withArgs('invalidDecorator').returns(false);
 
-      assert.throws(function() {
-        TestcaseParser._handleDecorators(testcaseNotSanitized, ['invalidDecorator']);
-      }, Error, '"invalidDecorator" is not a supported decorator.');
+      TestcaseParser._handleDecorators(testcaseNotSanitized, ['invalidDecorator']);
+      sinon.assert.calledWith(addMock, new Error('"invalidDecorator" is not a supported decorator.'));
     });
 
-    it('should throw an error if there is no space between "bug" and the number', function() {
-      assert.throws(function() {
-        TestcaseParser._handleDecorators(testcaseNotSanitized, ['bug1']);
-      }, Error, '"bug1" is not a supported decorator.');
+    it('should add an error if there is no space between "bug" and the number', function() {
+      TestcaseParser._handleDecorators(testcaseNotSanitized, ['bug1']);
+      sinon.assert.calledWith(addMock, new Error('"bug1" is not a supported decorator.'));
     });
 
-    it('should throw an error if "bug" is not the first word', function() {
-      assert.throws(function() {
-        TestcaseParser._handleDecorators(testcaseNotSanitized, ['fake bug 1']);
-      }, Error, '"fake bug 1" is not a supported decorator.');
+    it('should add an error if "bug" is not the first word', function() {
+      TestcaseParser._handleDecorators(testcaseNotSanitized, ['fake bug 1']);
+      sinon.assert.calledWith(addMock, new Error('"fake bug 1" is not a supported decorator.'));
     });
 
-    it('should throw an error if "bug" is not in lowercase', function() {
-      assert.throws(function() {
-        TestcaseParser._handleDecorators(testcaseNotSanitized, ['Bug 1']);
-      }, Error, '"Bug 1" is not a supported decorator.');
+    it('should add an error if "bug" is not in lowercase', function() {
+      TestcaseParser._handleDecorators(testcaseNotSanitized, ['Bug 1']);
+      sinon.assert.calledWith(addMock, new Error('"Bug 1" is not a supported decorator.'));
     });
 
-    it('should throw an error if "bug" is not a single word', function() {
-      assert.throws(function() {
-        TestcaseParser._handleDecorators(testcaseNotSanitized, ['bugzilla 1']);
-      }, Error, '"bugzilla 1" is not a supported decorator.');
+    it('should add an error if "bug" is not a single word', function() {
+      TestcaseParser._handleDecorators(testcaseNotSanitized, ['bugzilla 1']);
+      sinon.assert.calledWith(addMock, new Error('"bugzilla 1" is not a supported decorator.'));
     });
 
     // TODO, this edge case is currently not supported.
-    // it('should throw an error if a value is already assigned', function() {
+    // it('should add an error if a value is already assigned', function() {
     //
     // });
   });
