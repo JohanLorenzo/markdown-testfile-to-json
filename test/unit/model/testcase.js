@@ -2,9 +2,21 @@
 
 var assert = require('chai').assert;
 var sinon = require('sinon');
-var Testcase = require('../../../lib/model/testcase');
+var rewire = require('rewire');
+var Testcase = rewire('../../../lib/model/testcase');
 
 describe('Testcase parser', function () {
+
+  var errorHandlerMock = {
+    add: function() {}
+  };
+  Testcase.__set__('errorHandler', errorHandlerMock);
+  var addMock = sinon.stub(errorHandlerMock, 'add');
+
+  afterEach(function() {
+    addMock.reset();
+  });
+
 
   describe('the constructor', function() {
     var object;
@@ -31,11 +43,13 @@ describe('Testcase parser', function () {
     });
 
     it('should enforce the presence of the ID', function() {
-      assert.throws(function() { new Testcase(object.undefinedId); }, Error);
+      new Testcase(object.undefinedId);
+      sinon.assert.calledOnce(addMock);
     });
 
     it('should enforce the presence of the instructions', function() {
-      assert.throws(function() { new Testcase('id', object.undefinedInstructions); }, Error);
+      new Testcase('id', object.undefinedInstructions);
+      sinon.assert.calledOnce(addMock);
     });
 
     it('should set the state to "active" if undefined', function() {
@@ -90,12 +104,14 @@ describe('Testcase parser', function () {
       assert.strictEqual(Testcase._sanitizeId('my_test'), 'my_test');
     });
 
-    it('should accept strings only', function() {
-      assert.throws(function() { Testcase._sanitizeId(1); }, '"1" should contains only letters, dots, and underscores');
+    it('should add an error if a string is not given', function() {
+      Testcase._sanitizeId(1);
+      sinon.assert.calledWith(addMock, new Error('"1" should contains only letters, dots, and underscores'));
     });
 
-    it('should not accept spaces in the middle', function() {
-      assert.throws(function() { Testcase._sanitizeId('fxos test'); }, '"fxos test" should contains only letters, dots, and underscores');
+    it('should add an error if there is a space in the middle', function() {
+      Testcase._sanitizeId('fxos test');
+      sinon.assert.calledWith(addMock, new Error('"fxos test" should contains only letters, dots, and underscores'));
     });
   });
 
@@ -104,8 +120,9 @@ describe('Testcase parser', function () {
       assert.strictEqual(Testcase._sanitizeString('fxos.test'), 'fxos.test');
     });
 
-    it('should accept strings only', function() {
-      assert.throws(function() { Testcase._sanitizeString(1); }, '"1" must be a string');
+    it('should add an error if a string is not given', function() {
+      Testcase._sanitizeString(1);
+      sinon.assert.calledWith(addMock, new Error('"1" must be a string'));
     });
   });
 
@@ -118,16 +135,19 @@ describe('Testcase parser', function () {
       assert.strictEqual(Testcase._sanitizePositiveInteger("1"), 1);
     });
 
-    it('should not accept negative integers', function() {
-      assert.throws(function() { Testcase._sanitizePositiveInteger("-1"); }, '"-1" must be a positive finite integer');
+    it('should add an error if a negative integer is given', function() {
+      Testcase._sanitizePositiveInteger("-1");
+      sinon.assert.calledWith(addMock, new Error('"-1" must be a positive finite integer'));
     });
 
-    it('should not convert a decimal number', function() {
-      assert.throws(function() { Testcase._sanitizePositiveInteger("1.0"); }, '"1.0" must be a positive finite integer');
+    it('should add an error if decimal number is given', function() {
+      Testcase._sanitizePositiveInteger("1.0");
+      sinon.assert.calledWith(addMock, new Error('"1.0" must be a positive finite integer'));
     });
 
-    it('should throw an error if a non-interger is given', function() {
-      assert.throws(function() { Testcase._sanitizePositiveInteger("1.1"); }, '"1.1" must be a positive finite integer');
+    it('should add an error if a non-interger is given', function() {
+      Testcase._sanitizePositiveInteger("1.1");
+      sinon.assert.calledWith(addMock, new Error('"1.1" must be a positive finite integer'));
     });
   });
 
@@ -142,8 +162,9 @@ describe('Testcase parser', function () {
       assert(Testcase.isValidState.calledWith('active'));
     });
 
-    it('should throw an error if the state is not a valid one', function() {
-      assert.throws(function() { Testcase._sanitizeState('invalidState'); }, '"invalidState" is not a valid state');
+    it('should add an error if the state is not a valid one', function() {
+      Testcase._sanitizeState('invalidState');
+      sinon.assert.calledWith(addMock, new Error('"invalidState" is not a valid state'));
     });
   });
 
