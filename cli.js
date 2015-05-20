@@ -1,5 +1,7 @@
 #!/usr/bin/env node
+
 'use strict';
+
 var meow = require('meow');
 var markdownTestfileToJson = require('./');
 
@@ -13,4 +15,17 @@ var cli = meow({
   ].join('\n')
 });
 
-markdownTestfileToJson(cli.input[0]);
+markdownTestfileToJson(cli.input[0])
+  .then(function(json) {
+    console.log(JSON.stringify(json));
+  })
+  .catch(function(errors) {
+    errors = _ensureArray(errors);
+    errors.forEach(function(error) {
+      console.error(error.toString());
+    });
+  });
+
+function _ensureArray(candidate) {
+  return (candidate instanceof Array) ? candidate : [candidate];
+}
