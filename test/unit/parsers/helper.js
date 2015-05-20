@@ -1,9 +1,21 @@
 'use strict';
 
 var assert = require('chai').assert;
-var helper = require('../../../lib/parsers/helper');
+var sinon = require('sinon');
+var rewire = require('rewire');
+var helper = rewire('../../../lib/parsers/helper');
 
 describe('The helper parser', function () {
+
+  var errorHandlerMock = {
+    add: function() {}
+  };
+  helper.__set__('errorHandler', errorHandlerMock);
+  var addMock = sinon.stub(errorHandlerMock, 'add');
+
+  afterEach(function() {
+    addMock.reset();
+  });
 
   describe('sortTokensByHierarchy()', function() {
 
@@ -56,14 +68,14 @@ describe('The helper parser', function () {
       }]);
     });
 
-    it('should throw an error if no last token exist', function() {
+    it('should add an error if no last token exist', function() {
       tokens = [{
         type: 'paragraph',
         text: 'text'
       }];
 
-      assert.throws(function() { helper.sortTokensByHierarchy(tokens, 'heading', 1); },
-        Error, '"paragraph" with the text "text" should not be before a "heading"');
+      helper.sortTokensByHierarchy(tokens, 'heading', 1);
+      sinon.assert.calledWith(addMock, new Error('"paragraph" with the text "text" should not be before a "heading"'));
     });
   });
 });
