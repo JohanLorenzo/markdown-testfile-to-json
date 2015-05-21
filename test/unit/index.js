@@ -27,76 +27,52 @@ describe('the main package', function() {
     assert.instanceOf(mainPackage(), Promise);
   });
 
-  it('should read a file', function(done) {
-    mainPackage('filePath').then(function() {
-      check(done, function() {
-        sinon.assert.calledWith(readFileStub, 'filePath');
-      });
+  it('should read a file', function() {
+    return mainPackage('filePath').then(function() {
+      sinon.assert.calledWith(readFileStub, 'filePath');
     });
   });
 
-  it('should parse the file given', function(done) {
-    mainPackage('filePath').then(function() {
-      check(done, function() {
-        sinon.assert.calledWith(parseMarkdownStub, 'fileText');
-      });
+  it('should parse the file given', function() {
+    return mainPackage('filePath').then(function() {
+      sinon.assert.calledWith(parseMarkdownStub, 'fileText');
     });
   });
 
-  it('should set the file name if there are errors in the handler', function(done) {
+  it('should set the file name if there are errors in the handler', function() {
     errorHandlerMock.hasAnyError.returns(true);
 
-    mainPackage('filePath').catch(function() {
-      check(done, function() {
-        sinon.assert.calledWith(errorHandlerMock.setFileNameIfNotSet, 'filePath');
-      });
+    return mainPackage('filePath').catch(function() {
+      sinon.assert.calledWith(errorHandlerMock.setFileNameIfNotSet, 'filePath');
     });
 
   });
 
-  it('should reject the promise if there are errors in the handler', function(done) {
+  it('should reject the promise if there are errors in the handler', function() {
     errorHandlerMock.hasAnyError.returns(true);
-    mainPackage('filePath').catch(function() {
-      check(done, function() {
-        assert.ok(true);
-      });
+    return mainPackage('filePath').catch(function() {
+      assert.ok(true);
     });
   });
 
-  it('should contain the errors if the promise is rejected', function(done) {
+  it('should contain the errors if the promise is rejected', function() {
     errorHandlerMock.hasAnyError.returns(true);
-    mainPackage('filePath').catch(function(errors) {
-      check(done, function() {
-        assert.equal(errors, errorHandlerMock.errors);
-      });
+    return mainPackage('filePath').catch(function(errors) {
+      assert.equal(errors, errorHandlerMock.errors);
     });
   });
 
-  it('should resolve the promise with the json parsed if no error', function(done) {
+  it('should resolve the promise with the json parsed if no error', function() {
     errorHandlerMock.hasAnyError.returns(false);
-    mainPackage('filePath').then(function() {
-      check(done, function() {
-        assert.ok(true);
-      });
+    return mainPackage('filePath').then(function() {
+      assert.ok(true);
     });
   });
 
-  it('should contain the json if the promise is resolved', function(done) {
+  it('should contain the json if the promise is resolved', function() {
     errorHandlerMock.hasAnyError.returns(false);
-    mainPackage('filePath').then(function(json) {
-      check(done, function() {
-        assert.equal(json, 'json');
-      });
+    return mainPackage('filePath').then(function(json) {
+      assert.equal(json, 'json');
     });
   });
 });
-
-
-function check(done, f) {
-  try {
-    f();
-    done();
-  } catch (e) {
-    done(e);
-  }
-}
