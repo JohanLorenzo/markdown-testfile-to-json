@@ -34,6 +34,31 @@ describe('errorHandler', function() {
     });
   });
 
+  describe('clearErrors()', function() {
+    it('should remove the errors', function() {
+      errorHandler.add(error);
+      errorHandler.clearErrors();
+      assert.lengthOf(errorHandler.errors, 0);
+    });
+
+    it('should keep the same array', function() {
+      var arrayOrigin = errorHandler.errors;
+      errorHandler.clearErrors();
+      assert.equal(arrayOrigin, errorHandler.errors);
+    });
+  });
+
+  describe('hasAnyError()', function() {
+    it('should return false if empty', function() {
+      assert.notOk(errorHandler.hasAnyError());
+    });
+
+    it('should return true if not empty', function() {
+      errorHandler.add(error);
+      assert.ok(errorHandler.hasAnyError());
+    });
+  });
+
   describe('setFileNameIfNotSet()', function() {
     it('should set file name', function() {
       errorHandler.add(error);
