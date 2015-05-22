@@ -19,7 +19,7 @@ function execute() {
     ].join('\n')
   });
 
-  return markdownTestfileToJson(cli.input[0])
+  return markdownTestfileToJson(cli.input)
     .then(function(json) {
       console.log(JSON.stringify(json));
       process.exit(EXIT_CODES.SUCCESS);

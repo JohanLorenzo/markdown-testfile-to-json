@@ -8,7 +8,7 @@ describe('executeCli', function() {
 
   var meowStub = sinon.stub();
   meowStub.returns({
-    input: ['firstArg']
+    input: ['firstArg', 'secondArg']
   });
   executeCli.__set__('meow', meowStub);
 
@@ -46,9 +46,9 @@ describe('executeCli', function() {
     });
   });
 
-  it('should send the first argument to the main package', function() {
+  it('should send all arguments to the main package', function() {
     return executeCli().then(function() {
-      sinon.assert.calledWith(packageStub, 'firstArg');
+      sinon.assert.calledWith(packageStub, ['firstArg', 'secondArg']);
     });
   });
 

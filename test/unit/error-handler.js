@@ -1,8 +1,8 @@
 'use strict';
 
 var assert = require('chai').assert;
-var sinon = require('sinon');
 var errorHandler = require('../../lib/error-handler');
+var ParserError = require('../../lib/parser-error');
 
 describe('errorHandler', function() {
 
@@ -10,7 +10,7 @@ describe('errorHandler', function() {
 
   beforeEach(function(){
     errorHandler.clearErrors();
-    error = new Error('error message');
+    error = new ParserError('error message');
   });
 
   it('should be global', function() {
@@ -25,12 +25,12 @@ describe('errorHandler', function() {
       assert.include(errorHandler.errors, error);
     });
 
-    // FIXME: errorHandler._replaceDefaultToString doesn't seem to be called
-    it.skip('should replace the default toString() method', function() {
-      sinon.spy(errorHandler, '_replaceDefaultToString');
-      errorHandler.add(error);
-      // FIXME: sinon.assert.calledWith(errorHandler._replaceDefaultToString, error); does a toString() on the error object
-      sinon.assert.calledOnce(errorHandler._replaceDefaultToString);
+    it('should convert an Error to a ParserError', function() {
+      var standardError = new Error('standardErrorMessage');
+      errorHandler.add(standardError);
+
+      assert.instanceOf(errorHandler.errors[0], ParserError);
+      assert.equal(errorHandler.errors[0].message, 'standardErrorMessage');
     });
   });
 
@@ -82,7 +82,7 @@ describe('errorHandler', function() {
 
       errorHandler.setFileNameIfNotSet('testFile');
 
-      errors.forEach(function(error) {
+      errorHandler.errors.forEach(function(error) {
         assert.equal(error.fileName, 'testFile');
       });
     });
@@ -91,28 +91,11 @@ describe('errorHandler', function() {
       errorHandler.add(error);
       errorHandler.setFileNameIfNotSet('testFile');
 
-      var secondError = new Error();
+      var secondError = new ParserError();
       errorHandler.add(secondError);
       errorHandler.setFileNameIfNotSet('otherName');
       assert.equal(error.fileName, 'testFile');
       assert.equal(secondError.fileName, 'otherName');
-    });
-  });
-
-  describe('_replaceDefaultToString()', function() {
-    it('should change toString() by _errorToString()', function() {
-      var expectedError = new Error('error message');
-      expectedError.toString = errorHandler._errorToString.bind(expectedError);
-      errorHandler._replaceDefaultToString(error);
-      assert.equal(error.toString(), expectedError.toString());
-    });
-  });
-
-  describe('_errorToString()', function() {
-    it('should format the string to contain fileName: errorMessage', function() {
-      error.fileName = 'file_name';
-      error.toString = errorHandler._errorToString.bind(error);
-      assert.equal(error.toString(), 'file_name: error message');
     });
   });
 });
