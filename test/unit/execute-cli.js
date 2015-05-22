@@ -24,9 +24,15 @@ describe('executeCli', function() {
   };
   executeCli.__set__('console', consoleStub);
 
+  var processStub = {
+    exit: sinon.stub()
+  };
+  executeCli.__set__('process', processStub);
+
   afterEach(function() {
     consoleStub.log.reset();
     consoleStub.error.reset();
+    processStub.exit.reset();
   });
 
   it('should define a help message', function() {
@@ -46,9 +52,15 @@ describe('executeCli', function() {
     });
   });
 
-  it('should output the json if everything went well', function() {
+  it('should output the stringified json if everything went well', function() {
     return executeCli().then(function() {
       sinon.assert.calledWith(consoleStub.log, '{"result":"result"}');
+    });
+  });
+
+  it('should exit with 0 if everything went well', function() {
+    return executeCli().then(function() {
+      sinon.assert.calledWith(processStub.exit, 0);
     });
   });
 
@@ -65,6 +77,13 @@ describe('executeCli', function() {
     packageStub.returns(Promise.reject('error'));
     return executeCli().then(function() {
       sinon.assert.calledWith(consoleStub.error, 'error');
+    });
+  });
+
+  it('should exit with 1 if something went wrong', function() {
+    packageStub.returns(Promise.reject('error'));
+    return executeCli().then(function() {
+      sinon.assert.calledWith(processStub.exit, 1);
     });
   });
 
