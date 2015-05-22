@@ -54,7 +54,7 @@ describe('suiteParse', function () {
         childrenTokens: ['child']
       };
       suiteParse(token);
-      sinon.assert.calledWith(helperMock.sortTokensByHierarchy, token.childrenTokens, 'heading', 3);
+      sinon.assert.calledWith(helperMock.sortTokensByHierarchy, token.childrenTokens, 'heading', 2);
     });
 
     it('should delegate the parsing of the children tokens to parseTestCase', function() {
