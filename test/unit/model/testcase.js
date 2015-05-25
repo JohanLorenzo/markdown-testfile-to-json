@@ -23,6 +23,7 @@ describe('Testcase parser', function () {
 
     beforeEach(function() {
       object = {};
+      Testcase.alreadyDefinedIds.length = 0;
     });
 
     it('should accept all attributes', function() {
@@ -71,6 +72,11 @@ describe('Testcase parser', function () {
       var testcase = new Testcase('id', 'instructions');
       assert.isUndefined(testcase.variables);
     });
+
+    it('should push the id to the array of already defined Ids', function() {
+      new Testcase('newId', 'instructions');
+      assert.include(Testcase.alreadyDefinedIds, 'newId');
+    });
   });
 
   describe('isValidState()', function() {
@@ -112,6 +118,12 @@ describe('Testcase parser', function () {
     it('should add an error if there is a space in the middle', function() {
       Testcase._sanitizeId('fxos test');
       sinon.assert.calledWith(addMock, new Error('"fxos test" should contains only letters, dots, and underscores'));
+    });
+
+    it('should add an error if the id is already defined', function() {
+      new Testcase('dupeId', 'instructions');
+      Testcase._sanitizeId('dupeId');
+      sinon.assert.calledWith(addMock, new Error('The ID "newId" is already used'));
     });
   });
 
