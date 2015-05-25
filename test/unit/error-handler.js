@@ -59,6 +59,26 @@ describe('errorHandler', function() {
     });
   });
 
+  describe('hasAnyErrorWithoutFileNameSet()', function() {
+    it('should return true if an error has no fileName set', function() {
+      errorHandler.add(error);
+      error.fileName = 'fileName';
+      errorHandler.add(new Error('message'));
+      assert.ok(errorHandler.hasAnyErrorWithoutFileNameSet());
+    });
+
+    it('should return false every error has a fileName', function() {
+      error.fileName = 'fileName';
+      var secondError = new ParserError('message');
+      secondError.fileName = 'second File Name';
+
+      errorHandler.add(error);
+      errorHandler.add(secondError);
+
+      assert.notOk(errorHandler.hasAnyErrorWithoutFileNameSet());
+    });
+  });
+
   describe('setFileNameIfNotSet()', function() {
     it('should set file name', function() {
       errorHandler.add(error);
