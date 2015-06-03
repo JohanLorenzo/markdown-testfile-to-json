@@ -5,7 +5,7 @@ var sinon = require('sinon');
 var rewire = require('rewire');
 var Testcase = rewire('../../../lib/model/testcase');
 
-describe('Testcase parser', function () {
+describe('Testcase', function () {
 
   var errorHandlerMock = {
     add: function() {}
@@ -179,20 +179,4 @@ describe('Testcase parser', function () {
       sinon.assert.calledWith(addMock, new Error('"invalidState" is not a valid state'));
     });
   });
-
-  describe('_isOptionalFieldDefined', function() {
-    it('should return true when called with an argument', function() {
-      assert.ok(Testcase._isOptionalFieldDefined(''));
-    });
-
-    it('should return false when called with no argument', function() {
-      assert.notOk(Testcase._isOptionalFieldDefined());
-    });
-
-    it('should return false when called with an argument set to undefined', function() {
-      var object = {};
-      assert.notOk(Testcase._isOptionalFieldDefined(object.undefinedArgument));
-    });
-  });
-
 });
