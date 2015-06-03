@@ -4,7 +4,7 @@
 
 ## As a command line tool
 ```sh
-$ ./cli.js test-formated-file.md
+$ ./cli.js test-formated-file.md [test-formated-file2.md...]
 ```
 
 ```sh
@@ -25,7 +25,9 @@ $ npm install --save markdown-testfile-to-json
 ```js
 var markdownTestfileToJson = require('markdown-testfile-to-json');
 
-markdownTestfileToJson(inputFile);
+markdownTestfileToJson([inputFile1, inputFile2]).then(function(testsuites) {
+  // Do something with the testsuites
+});
 ```
 
 ## License
