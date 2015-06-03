@@ -9,14 +9,16 @@ var _ = require('lodash');
 module.exports = function(inputFilePaths) {
   var promises = inputFilePaths.map(_handleSingleFilePath);
 
-  return Promise.all(promises).then(function(results) {
+  return Promise.all(promises).then(function(suitesPerFile) {
+
+    var allSuites = _.flatten(suitesPerFile);
+    var mergedSuites = _mergeSuites(allSuites);
+    _linkSuiteVariables(mergedSuites);
 
     // Sometimes some promises have failed
     if (errorHandler.hasAnyError()) {
       return Promise.reject(errorHandler.errors);
     } else {
-      var validSuites = _.flatten(results);
-      var mergedSuites = _mergeSuites(validSuites);
       return Promise.resolve(mergedSuites);
     }
 
@@ -24,6 +26,27 @@ module.exports = function(inputFilePaths) {
     return Promise.reject(errorHandler.errors);
   });
 };
+
+function _linkSuiteVariables(mergedSuites) {
+  mergedSuites.forEach(function(suite) {
+    if(typeof suite.variables !== 'undefined') {
+      _linkSuiteVariablesToTestcases(suite.variables, suite.testcases);
+      delete suite.variables;
+    }
+  });
+}
+
+function _linkSuiteVariablesToTestcases(suiteVariables, testcases) {
+  testcases.forEach(function(testcase) {
+    var testcaseVariables = suiteVariables[testcase.id];
+
+    if (typeof testcaseVariables === 'undefined') {
+      errorHandler.add(new Error('The id "' + testcase.id + '" mentioned in the table is not defined in the suite'));
+    } else {
+      testcase.variablesFromSuite = testcaseVariables;
+    }
+  });
+}
 
 function _handleSingleFilePath(inputFilePath) {
   return readFile(inputFilePath, 'utf8').then(function(text) {
