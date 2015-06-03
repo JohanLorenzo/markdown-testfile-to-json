@@ -1,9 +1,9 @@
 'use strict';
 
 var assert = require('chai').assert;
-var parseMarkdown = require('../../../lib/parsers/markdown');
+var parseMarkdown = require('../../lib/parsers/markdown');
 
-describe('The magical ugly parser', function() {
+describe('The markdown parser', function() {
 
   it('should transform the whole markdown file into this whole json file', function() {
     var actualResult = parseMarkdown(['# Launch suite',
