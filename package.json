@@ -10,7 +10,10 @@
   "license": "MIT",
   "files": [
     "index.js",
-    "cli.js"
+    "cli.js",
+    "execute-cli.js",
+    "README.md",
+    "lib/"
   ],
   "keywords": [
     "markdown-testfile-to-json"
