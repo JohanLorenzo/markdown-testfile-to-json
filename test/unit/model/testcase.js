@@ -110,14 +110,13 @@ describe('Testcase', function () {
       assert.strictEqual(Testcase._sanitizeId('my_test'), 'my_test');
     });
 
-    it('should add an error if a string is not given', function() {
-      Testcase._sanitizeId(1);
-      sinon.assert.calledWith(addMock, new Error('"1" should contains only letters, dots, and underscores'));
+    it('should accept digits', function() {
+      assert.strictEqual(Testcase._sanitizeId(1), 1);
     });
 
     it('should add an error if there is a space in the middle', function() {
       Testcase._sanitizeId('fxos test');
-      sinon.assert.calledWith(addMock, new Error('"fxos test" should contains only letters, dots, and underscores'));
+      sinon.assert.calledWith(addMock, new Error('"fxos test" should contain only letters, digits, dots, and underscores'));
     });
 
     it('should add an error if the id is already defined', function() {
