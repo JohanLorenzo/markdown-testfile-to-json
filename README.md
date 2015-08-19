@@ -130,8 +130,62 @@ recipients   | should pass
 contact name | yes
 ```
 
+# Output
+Like mentioned in the name of the project, this parser returns a JSON ouput.
+## Suite matrix example
+``` json
+[{
+  "name": "SMS suite",
+  "testcases": [{
+    "id": "fxos.sms.send_sms",
+    "instructions": "Send a text message to another phone number.",
+    "state": "active",
+    "bug": 1,
+    "variablesFromSuite": ["TMobile", "Wi-FI", "No Internet", "2G", "3G", "Multiple SIMS", "Reference Workload", "AT&T", "Automatic Download", "Delivery Reports", "Airplane Mode", "Dual SIM priority", "Multiple Recipient Thread"]
+  }, {
+    "id": "fxos.sms.send_mms",
+    "instructions": "Receive a text message from another phone number.",
+    "state": "active",
+    "bug": 2,
+    "variablesFromSuite": ["TMobile", "Wi-FI", "No Internet", "2G", "3G", "Multiple SIMS", "Reference Workload", "AT&T", "Automatic Download", "Delivery Reports", "Airplane Mode", "Dual SIM priority", "Multiple Recipient Thread"]
+  }, {
+    "id": "fxos.sms.forward_sms",
+    "instructions": "Send an SMS you received to another contact.",
+    "state": "active",
+    "bug": 3,
+    "variablesFromSuite": ["No Internet", "AT&T"]
+  }, {
+    "id": "fxos.sms.call_recipient",
+    "instructions": "From a text conversation, perform a call to your contact.",
+    "state": "active",
+    "bug": 4,
+    "variablesFromSuite": ["No Internet", "AT&T"]
+  }]
+}]
+```
 
-
+## Test case matrix example
+``` json
+[{
+  "name": "SMS suite",
+  "testcases": [{
+    "id": "fxos.sms.text_new_number",
+    "instructions": "Create a new text message and add the following recipients:",
+    "state": "active",
+    "bug": 5,
+    "variables": [{
+      "recipients": "123",
+      "should pass": "yes"
+    }, {
+      "recipients": "+++",
+      "should pass": "no"
+    }, {
+      "recipients": "contact name",
+      "should pass": "yes"
+    }]
+  }]
+}]
+```
 # License
 
 MIT
